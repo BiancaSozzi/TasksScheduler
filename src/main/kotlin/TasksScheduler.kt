@@ -37,8 +37,9 @@ fun parseData(line: String): List<String> {
  * Prints error message
  * @param error Throwable
  */
-fun logError(error: Throwable) {
-    println("${ConsoleColors.COLOR_RED} $error ${ConsoleColors.COLOR_RESET}")
+fun logError(error: Throwable, message: String = "") {
+    println(
+        "${ConsoleColors.COLOR_RED} $error \n $message ${ConsoleColors.COLOR_RESET}")
 }
 
 /**
@@ -80,13 +81,14 @@ fun nextScheduledRun(schedule: String, currentTime: LocalTime): String {
 
 fun main(args: Array<String>) {
     // Default simulated time to now
-    var simulatedTime: LocalTime = LocalTime.now()
+    val currentTime = LocalTime.now()
+    var simulatedTime: LocalTime = LocalTime.of(currentTime.hour, currentTime.minute)
 
     runCatching {
         // Get simulated time input parameter
         simulatedTime = LocalTime.parse(args[0])
     }.onFailure {
-        logError(it)
+        logError(it, "Running with simulated time $simulatedTime")
     }
 
     // Read data and print next execution time for each entry
